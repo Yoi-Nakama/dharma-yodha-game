@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dharma Yodha - Loading</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="loading-screen">
+    <video id="loading-video" autoplay loop muted playsinline>
+      <source src="../lv_0_20250724084633.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <audio id="fire-audio" autoplay loop>
+      <source src="../assets/audio/fire.mp3" type="audio/mp3">
+      Your browser does not support the audio element.
+    </audio>
+    <div class="loading-overlay">
+      <h1>Dharma Yodha</h1>
+      <p id="loading-text">Loading...</p>
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+    </div>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>
