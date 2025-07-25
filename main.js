@@ -257,3 +257,24 @@ document.addEventListener('DOMContentLoaded', function() {
     setupMenuButtons();
   }
 });
+let zoomLevel = 1.0;
+let locked = false;
+
+function zoomIn() {
+    if (!locked) {
+        zoomLevel += 0.1;
+        document.body.style.transform = `scale(${zoomLevel})`;
+        document.body.style.transformOrigin = 'top left';
+    }
+}
+function zoomOut() {
+    if (!locked) {
+        zoomLevel = Math.max(0.5, zoomLevel - 0.1);
+        document.body.style.transform = `scale(${zoomLevel})`;
+        document.body.style.transformOrigin = 'top left';
+    }
+}
+function lockZoom() {
+    locked = !locked;
+      }
+    
