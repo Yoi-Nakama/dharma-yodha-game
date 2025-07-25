@@ -1,0 +1,72 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+#loading-screen {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+#loading-video {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  filter: brightness(0.7) blur(1px);
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #ffe6b3;
+  background: rgba(0,0,0,0.35);
+}
+
+.loading-overlay h1 {
+  font-size: 3em;
+  margin-bottom: 0.3em;
+  text-shadow: 2px 2px 8px #ff8800, 0 0 10px #222;
+}
+
+#loading-text {
+  font-size: 1.3em;
+  margin-bottom: 1em;
+  letter-spacing: 2px;
+}
+
+.progress-container {
+  width: 60vw;
+  height: 24px;
+  background: #333;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px #0007;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ff9800 0%, #fff176 100%);
+  border-radius: 16px;
+  transition: width 0.3s;
+}
+
+@media (max-width: 600px) {
+  .loading-overlay h1 { font-size: 2em; }
+  .progress-container { width: 80vw; }
+  }
