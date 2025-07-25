@@ -56,12 +56,37 @@
   <audio id="piano5" src="assets/audio/piano5.mp3" preload="auto"></audio>
   <script src="main.js"></script>
 
-<div id="zoom-controls" style="position:fixed;top:10px;right:10px;z-index:9999;">
-    <button onclick="zoomIn()">＋</button>
-    <button onclick="zoomOut()">－</button>
-    <button onclick="lockZoom()">🔒</button>
-</div>
-<script src="piano_sound.js"></script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    let scale = 1, startDistance = 0;
+    let container = document.body;
+
+    container.addEventListener('touchstart', function(e) {
+        if (e.touches.length === 2) {
+            startDistance = Math.hypot(
+                e.touches[0].pageX - e.touches[1].pageX,
+                e.touches[0].pageY - e.touches[1].pageY
+            );
+        }
+    });
+
+    container.addEventListener('touchmove', function(e) {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            const currentDistance = Math.hypot(
+                e.touches[0].pageX - e.touches[1].pageX,
+                e.touches[0].pageY - e.touches[1].pageY
+            );
+            const zoomFactor = currentDistance / startDistance;
+            scale = Math.min(Math.max(0.8, zoomFactor), 2);
+            container.style.transform = `scale(${scale})`;
+            container.style.transformOrigin = '0 0';
+        }
+    }, { passive: false });
+});
+</script>
 
 </body>
-    </html>
+</html>
