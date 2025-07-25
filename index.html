@@ -3,26 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <title>Dharma Yodha - Loading</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Device Orientation Overlay -->
+  <div id="orientation-lock">
+    <div class="orientation-text">
+      <h2>Rotate Device</h2>
+      <p>Please rotate your device to <b>landscape</b> mode to play Dharma Yodha.</p>
+    </div>
+  </div>
+  <!-- Prevent Reload Warning -->
+  <div id="reload-lock">
+    <div class="reload-text">
+      <h2>Reload Disabled</h2>
+      <p>Dragging down to reload is disabled to prevent interruptions while you play!</p>
+      <button onclick="document.getElementById('reload-lock').style.display='none'">OK</button>
+    </div>
+  </div>
+  <!-- Fantasy Loading Screen -->
   <div id="loading-screen">
-    <video id="loading-video" autoplay loop muted playsinline>
-      <source src="video/lv_0_20250724084633.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-    <audio id="fire-audio" autoplay loop>
-      <source src="assets/audio/fire.mp3" type="audio/mp3">
-      Your browser does not support the audio element.
-    </audio>
-    <div class="loading-overlay">
+    <div class="fantasy-glow"></div>
+    <div class="fantasy-orbs">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+      <div class="orb orb3"></div>
+    </div>
+    <div class="loading-content">
       <h1>Dharma Yodha</h1>
-      <p id="loading-text">Loading...</p>
+      <p id="loading-text">Summoning magic...</p>
       <div class="progress-container">
         <div class="progress-bar" id="progress-bar"></div>
       </div>
     </div>
   </div>
+  <!-- Main Menu -->
+  <div id="main-menu" style="display:none;">
+    <div id="bg-anim"></div>
+    <!-- Use your fantasy artwork as parallax background -->
+    <img src="Picsart_25-07-25_16-45-16-611.png" id="menu-bg" alt="Main Menu Background">
+    <div class="menu-overlay">
+      <h1 class="game-title">Dharma Yodha</h1>
+      <div class="menu-buttons">
+        <button class="menu-btn" id="start-btn">Start Game</button>
+        <button class="menu-btn" id="continue-btn">Continue</button>
+        <button class="menu-btn" id="settings-btn">Settings</button>
+        <button class="menu-btn" id="about-btn">About</button>
+        <button class="menu-btn" id="exit-btn">Exit</button>
+      </div>
+    </div>
+  </div>
   <script src="main.js"></script>
 </body>
-</html>
+  </html>
