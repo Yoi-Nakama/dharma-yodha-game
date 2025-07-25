@@ -14,14 +14,6 @@
       <p>Please rotate your device to <b>landscape</b> mode to play Dharma Yodha.</p>
     </div>
   </div>
-  <!-- Prevent Reload Warning -->
-  <div id="reload-lock">
-    <div class="reload-text">
-      <h2>Reload Disabled</h2>
-      <p>Dragging down to reload is disabled to prevent interruptions while you play!</p>
-      <button onclick="document.getElementById('reload-lock').style.display='none'">OK</button>
-    </div>
-  </div>
   <!-- Fantasy Loading Screen -->
   <div id="loading-screen">
     <div class="fantasy-glow"></div>
@@ -41,7 +33,6 @@
   <!-- Main Menu -->
   <div id="main-menu" style="display:none;">
     <div id="bg-anim"></div>
-    <!-- Use your fantasy artwork as parallax background -->
     <img src="Picsart_25-07-25_16-45-16-611.png" id="menu-bg" alt="Main Menu Background">
     <div class="menu-overlay">
       <h1 class="game-title">Dharma Yodha</h1>
@@ -54,6 +45,12 @@
       </div>
     </div>
   </div>
+  <!-- Piano note sounds (hidden) -->
+  <audio id="piano1" src="assets/audio/piano1.mp3" preload="auto"></audio>
+  <audio id="piano2" src="assets/audio/piano2.mp3" preload="auto"></audio>
+  <audio id="piano3" src="assets/audio/piano3.mp3" preload="auto"></audio>
+  <audio id="piano4" src="assets/audio/piano4.mp3" preload="auto"></audio>
+  <audio id="piano5" src="assets/audio/piano5.mp3" preload="auto"></audio>
   <script src="main.js"></script>
 </body>
   </html>
