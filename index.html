@@ -12,7 +12,13 @@
     <div class="orientation-text">
       <h2>Rotate Device</h2>
       <p>Please rotate your device to <b>landscape</b> mode to play Dharma Yodha.</p>
-    </div>
+    
+<div style="margin-top: 20px;">
+    <button onclick="playPianoNote()">🎵 Play Piano</button>
+    <button onclick="alert('Inventory system coming soon!')">🧳 Inventory</button>
+</div>
+
+</div>
   </div>
   <!-- Fantasy Loading Screen -->
   <div id="loading-screen">
@@ -49,5 +55,13 @@
   <audio id="piano4" src="assets/audio/piano4.mp3" preload="auto"></audio>
   <audio id="piano5" src="assets/audio/piano5.mp3" preload="auto"></audio>
   <script src="main.js"></script>
+
+<div id="zoom-controls" style="position:fixed;top:10px;right:10px;z-index:9999;">
+    <button onclick="zoomIn()">＋</button>
+    <button onclick="zoomOut()">－</button>
+    <button onclick="lockZoom()">🔒</button>
+</div>
+<script src="piano_sound.js"></script>
+
 </body>
-          </html>
+    </html>
