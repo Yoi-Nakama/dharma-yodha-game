@@ -1,13 +1,4 @@
-// Prevent accidental reload by intercepting touch events (for mobile browsers)
-let preventReload = true;
-window.addEventListener('touchmove', function(e) {
-  if (preventReload && e.touches[0] && e.touches[0].clientY < 80) {
-    e.preventDefault();
-    document.getElementById('reload-lock').style.display = 'flex';
-  }
-}, { passive: false });
-
-// Device orientation lock logic
+// ========== ORIENTATION LOCK: =============
 function checkOrientation() {
   let landscape = window.innerWidth > window.innerHeight;
   document.getElementById('orientation-lock').style.display = landscape ? 'none' : 'flex';
@@ -16,25 +7,78 @@ window.addEventListener('resize', checkOrientation);
 window.addEventListener('orientationchange', checkOrientation);
 checkOrientation();
 
-// Fantasy loading text cycles
+// ========== PREVENT RELOAD (NO OVERLAY!) ===========
+window.addEventListener('touchmove', e => {
+  if (e.touches && e.touches.length === 1 && e.touches[0].clientY < 70) {
+    // Block pull-to-refresh gesture (does NOT show overlay)
+    e.preventDefault();
+  }
+}, { passive: false });
+
+// ========== STATE MANAGEMENT ACROSS RELOADS ===========
+const STATE_KEY = "dharmayodha_state_v1";
+function saveState(page) { localStorage.setItem(STATE_KEY, page); }
+function loadState() { return localStorage.getItem(STATE_KEY) || "loading"; }
+
+// ========== RANDOM LOADING PHRASES =============
 const loadingPhrases = [
   "Summoning magic...",
   "Conjuring game world...",
   "Forging legendary weapons...",
   "Binding sacred spirits...",
   "Enchanting animations...",
-  "Preparing your adventure...",
-  "Almost ready!"
+  "Sharpening your skills...",
+  "Preparing epic quests...",
+  "Summoning new adventures...",
+  "Enlisting pixel warriors...",
+  "Gathering secret runes...",
+  "Tuning the ancient piano...",
+  "Brewing elixirs for luck...",
+  "Consulting the wise sages...",
+  "Rolling for critical hits...",
+  "Coding with cosmic energy...",
+  "Blessing your journey...",
+  "Charging up mythic power...",
+  "Syncing with the astral net...",
+  "Scouting for hidden treasures...",
+  "Heroes assembling at the gate...",
+  "Mystic fog clearing...",
+  "Unlocking secret combos...",
+  "Animating pixels of destiny...",
+  "Loading dazzling effects...",
+  "Enabling offline adventure...",
+  "Balancing the karma meter...",
+  "Reading the ancient scrolls...",
+  "Checking your internet fate...",
+  "Configuring cosmic servers...",
+  "Double-checking your luck...",
+  "Testing anti-cheat magic...",
+  "Amplifying fun by x10...",
+  "Loading next-gen graphics...",
+  "Summoning next-level vibes...",
+  "Randomizing random randomness...",
+  "Polishing every single pixel...",
+  "Doing yoga with the code monks...",
+  "Blessing your session...",
+  "Spawning more surprises...",
+  "Optimizing for potato devices...",
+  "Spawning more piano notes...",
+  "Giving you a head start...",
+  "Making it 10x cooler than Free Fire...",
+  "Loading... but fancier than ever...",
+  "Waving at the dev gods...",
+  "Preparing for legendary moments!",
+  "Game world almost ready!",
+  "Adventure Awaits!"
 ];
+let lastPhrases = [];
 
-// Asset loading simulation and real asset loading structure (expand as needed)
+// ========== ASSET PRELOAD SIMULATION ===========
 const assetsToLoad = [
   "Picsart_25-07-25_16-45-16-611.png"
-  // Add more asset URLs here for real preloading!
+  // Add more assets for real preloading
 ];
 let loadedAssets = 0;
-
-// Preload images and update progress
 function preloadAssets(onProgress, onComplete) {
   if (assetsToLoad.length === 0) { onProgress(100); onComplete(); return; }
   assetsToLoad.forEach(url => {
@@ -49,45 +93,54 @@ function preloadAssets(onProgress, onComplete) {
   });
 }
 
-// Animate loading bar & text
+// ========== LOADING BAR & RANDOM TIPS ==========
+function getNewPhrase() {
+  // Ensure new phrase is not one of the last 4
+  let pool = loadingPhrases.filter(x => !lastPhrases.includes(x));
+  let phrase = pool[Math.floor(Math.random() * pool.length)];
+  lastPhrases.push(phrase);
+  if (lastPhrases.length > 4) lastPhrases.shift();
+  return phrase;
+}
 function animateLoading() {
   const bar = document.getElementById('progress-bar');
   const text = document.getElementById('loading-text');
-  let phraseIndex = 0;
   let progress = 0;
-  let phase = 0;
-
-  function nextPhrase() {
-    text.innerText = loadingPhrases[phraseIndex];
-    phraseIndex = (phraseIndex + 1) % loadingPhrases.length;
-  }
+  let phrase = getNewPhrase();
+  text.innerText = phrase;
 
   // Animate loading bar based on real asset loading
   preloadAssets(
     percent => {
       bar.style.width = percent + "%";
-      if (percent > 10 && phase === 0) { nextPhrase(); phase++; }
-      else if (percent > 45 && phase === 1) { nextPhrase(); phase++; }
-      else if (percent > 75 && phase === 2) { nextPhrase(); phase++; }
-      else if (percent > 95 && phase === 3) { nextPhrase(); phase++; }
+      if (percent >= 100) {
+        text.innerText = "Adventure Awaits!";
+      }
     },
     () => {
-      bar.style.width = "100%";
-      text.innerText = "Adventure Awaits!";
-      setTimeout(showMainMenu, 1000);
+      setTimeout(() => {
+        bar.style.width = "100%";
+        text.innerText = "Adventure Awaits!";
+        saveState("main-menu");
+        setTimeout(showMainMenu, 950);
+      }, 500);
     }
   );
 
-  // Cycle phrases even if slow network
-  setInterval(nextPhrase, 2600);
+  // Change tip every 2.4s, never show the same tip twice in a row
+  let tipInterval = setInterval(() => {
+    let newPhrase = getNewPhrase();
+    text.innerText = newPhrase;
+    if (bar.style.width === "100%") clearInterval(tipInterval);
+  }, 2400);
 }
 
-// Fade from loading to main menu
+// ========== FADE LOADING => MAIN MENU ==========
 function showMainMenu() {
   document.getElementById('loading-screen').style.opacity = 1;
   let fade = setInterval(() => {
     let op = parseFloat(document.getElementById('loading-screen').style.opacity);
-    if (op <= 0.01) {
+    if (op <= 0.03) {
       document.getElementById('loading-screen').style.display = 'none';
       document.getElementById('main-menu').style.display = 'block';
       menuAnim();
@@ -98,19 +151,19 @@ function showMainMenu() {
   }, 40);
 }
 
-// Fantasy background animation (particles, shimmer, etc.)
+// ========== FANTASY BACKGROUND ANIMATION ==========
 function menuAnim() {
   const bg = document.getElementById('bg-anim');
   if (!bg) return;
   bg.innerHTML = "";
   // Fantasy particles
-  for (let i = 0; i < 34; i++) {
+  for (let i = 0; i < 40; i++) {
     let star = document.createElement('div');
     star.className = 'star-particle';
     let size = Math.random() * 1.8 + 0.5;
     let x = Math.random() * 100;
     let y = Math.random() * 100;
-    let duration = Math.random() * 2.5 + 2.5;
+    let duration = Math.random() * 2.5 + 3.5;
     let delay = Math.random() * 5;
     star.style = `
       position: absolute; left: ${x}vw; top: ${y}vh;
@@ -126,37 +179,70 @@ function menuAnim() {
     bg.appendChild(star);
   }
 }
-document.addEventListener('DOMContentLoaded', function() {
-  // Prevent accidental reloads on mobile
-  document.body.addEventListener('touchstart', function(e) {
-    if (e.touches.length > 1) e.preventDefault();
-  }, { passive: false });
-  animateLoading();
-});
-
-// Menu button events (expand with your game logic)
-document.getElementById('start-btn')?.addEventListener('click', () => {
-  alert("Start Game coming soon! (Connect to your game/scene logic here)");
-});
-document.getElementById('continue-btn')?.addEventListener('click', () => {
-  alert("Continue feature coming soon!");
-});
-document.getElementById('settings-btn')?.addEventListener('click', () => {
-  alert("Settings coming soon!");
-});
-document.getElementById('about-btn')?.addEventListener('click', () => {
-  alert("Dharma Yodha — a fantasy adventure by Yoi-Nakama. (Expand this about page!)");
-});
-document.getElementById('exit-btn')?.addEventListener('click', () => {
-  alert("Exit: On web, you can just close the tab or go back.");
-});
-
-// CSS animation for particles
 const style = document.createElement('style');
 style.innerHTML = `
 @keyframes star-float {
   from { transform: translateY(0) scale(1);}
   to { transform: translateY(-12vh) scale(1.2);}
-}
-`;
+}`;
 document.head.appendChild(style);
+
+// ========== BUTTON SOUND EFFECTS (PIANO NOTES) ==========
+const pianoNotes = [
+  document.getElementById('piano1'),
+  document.getElementById('piano2'),
+  document.getElementById('piano3'),
+  document.getElementById('piano4'),
+  document.getElementById('piano5')
+];
+function playRandomPiano() {
+  if (!window.pianoReady) {
+    // Try to start audio context on first user interaction
+    pianoNotes.forEach(a => { try { a.play().catch(()=>{}); a.pause(); a.currentTime=0; } catch{} });
+    window.pianoReady = true;
+  }
+  let idx = Math.floor(Math.random() * pianoNotes.length);
+  let note = pianoNotes[idx];
+  note.currentTime = 0;
+  note.play();
+}
+
+// ========== MENU BUTTON EVENTS ==========
+function setupMenuButtons() {
+  ["start-btn","continue-btn","settings-btn","about-btn","exit-btn"].forEach(id => {
+    let btn = document.getElementById(id);
+    if (btn) btn.addEventListener('click', playRandomPiano, false);
+  });
+  document.getElementById('start-btn')?.addEventListener('click', () => {
+    alert("Start Game coming soon! (Connect to your game/scene logic here)");
+  });
+  document.getElementById('continue-btn')?.addEventListener('click', () => {
+    alert("Continue feature coming soon!");
+  });
+  document.getElementById('settings-btn')?.addEventListener('click', () => {
+    alert("Settings coming soon!");
+  });
+  document.getElementById('about-btn')?.addEventListener('click', () => {
+    alert("Dharma Yodha — a fantasy adventure by Yoi-Nakama. (Expand this about page!)");
+  });
+  document.getElementById('exit-btn')?.addEventListener('click', () => {
+    alert("Exit: On web, you can just close the tab or go back.");
+  });
+}
+
+// ========== APP ENTRYPOINT ==========
+document.addEventListener('DOMContentLoaded', function() {
+  // Restore state: if already on main menu, skip loading
+  let state = loadState();
+  if (state === "main-menu") {
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('main-menu').style.display = 'block';
+    menuAnim();
+    setupMenuButtons();
+  } else {
+    document.getElementById('loading-screen').style.display = 'flex';
+    document.getElementById('main-menu').style.display = 'none';
+    animateLoading();
+    setupMenuButtons();
+  }
+});
