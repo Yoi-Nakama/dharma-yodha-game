@@ -1,4 +1,4 @@
-// ========== ORIENTATION LOCK: =============
+// ========== ORIENTATION LOCK ===========
 function checkOrientation() {
   let landscape = window.innerWidth > window.innerHeight;
   document.getElementById('orientation-lock').style.display = landscape ? 'none' : 'flex';
@@ -10,17 +10,16 @@ checkOrientation();
 // ========== PREVENT RELOAD (NO OVERLAY!) ===========
 window.addEventListener('touchmove', e => {
   if (e.touches && e.touches.length === 1 && e.touches[0].clientY < 70) {
-    // Block pull-to-refresh gesture (does NOT show overlay)
     e.preventDefault();
   }
 }, { passive: false });
 
-// ========== STATE MANAGEMENT ACROSS RELOADS ===========
-const STATE_KEY = "dharmayodha_state_v1";
+// ========== STATE MANAGEMENT ==========
+const STATE_KEY = "dharmayodha_state_v2";
 function saveState(page) { localStorage.setItem(STATE_KEY, page); }
 function loadState() { return localStorage.getItem(STATE_KEY) || "loading"; }
 
-// ========== RANDOM LOADING PHRASES =============
+// ========== LOADING ANIMATIONS AND RANDOMIZATION ===========
 const loadingPhrases = [
   "Summoning magic...",
   "Conjuring game world...",
@@ -69,31 +68,47 @@ const loadingPhrases = [
   "Waving at the dev gods...",
   "Preparing for legendary moments!",
   "Game world almost ready!",
-  "Adventure Awaits!"
+  "Adventure Awaits!",
+  "Unleashing creativity...",
+  "Rendering ultra effects...",
+  "Unlocking new secrets...",
+  "You look awesome today!",
+  "Get ready for a legendary run!",
+  "Tip: Touch any menu button for a piano note!",
+  "Bonus: Try playing with one finger only...",
+  "Pro move: Try two-finger tap for secret fun (maybe?)",
+  "Pixel spirits align in your favor!",
+  "Your device is now 10x cooler!"
 ];
 let lastPhrases = [];
 
-// ========== ASSET PRELOAD SIMULATION ===========
-const assetsToLoad = [
-  "Picsart_25-07-25_16-45-16-611.png"
-  // Add more assets for real preloading
-];
-let loadedAssets = 0;
-function preloadAssets(onProgress, onComplete) {
-  if (assetsToLoad.length === 0) { onProgress(100); onComplete(); return; }
-  assetsToLoad.forEach(url => {
-    const img = new Image();
-    img.onload = img.onerror = function() {
-      loadedAssets++;
-      let percent = Math.round((loadedAssets / assetsToLoad.length) * 100);
-      onProgress(percent);
-      if (loadedAssets === assetsToLoad.length) onComplete();
-    }
-    img.src = url;
-  });
+// ========== ANIMATED RANDOM ORBS ===========
+function spawnOrbs() {
+  const orbs = document.querySelector('.fantasy-orbs');
+  orbs.innerHTML = "";
+  const colors = [
+    "#ffe066", "#ffb300", "#f773bc", "#17e2ff", "#ffe066", "#ffb300"
+  ];
+  for (let i = 0; i < 7; i++) {
+    let orb = document.createElement('div');
+    orb.className = 'orb';
+    let size = Math.random() * 8 + 6; // vw
+    let x = Math.random() * 85;
+    let y = Math.random() * 70;
+    let color = colors[Math.floor(Math.random() * colors.length)];
+    orb.style = `
+      width:${size}vw;height:${size}vw;left:${x}vw;top:${y}vh;
+      background: radial-gradient(circle,${color} 0%,#fff0 100%);
+      animation-delay: ${Math.random()*5}s;
+      filter: blur(${size/4}px) brightness(1.1);
+      opacity: ${0.57 + Math.random()*0.18};
+      z-index:1;
+    `;
+    orbs.appendChild(orb);
+  }
 }
 
-// ========== LOADING BAR & RANDOM TIPS ==========
+// ========== LOADING BAR & RANDOM TIPS SLIDE ==========
 function getNewPhrase() {
   // Ensure new phrase is not one of the last 4
   let pool = loadingPhrases.filter(x => !lastPhrases.includes(x));
@@ -105,50 +120,45 @@ function getNewPhrase() {
 function animateLoading() {
   const bar = document.getElementById('progress-bar');
   const text = document.getElementById('loading-text');
+  const tips = document.getElementById('tips-slide');
   let progress = 0;
-  let phrase = getNewPhrase();
-  text.innerText = phrase;
+  let phase = 0;
 
-  // Animate loading bar based on real asset loading
-  preloadAssets(
-    percent => {
-      bar.style.width = percent + "%";
-      if (percent >= 100) {
-        text.innerText = "Adventure Awaits!";
-      }
-    },
-    () => {
-      setTimeout(() => {
-        bar.style.width = "100%";
-        text.innerText = "Adventure Awaits!";
-        saveState("main-menu");
-        setTimeout(showMainMenu, 950);
-      }, 500);
+  spawnOrbs();
+
+  // Asset loading simulation (fake for now)
+  let fakeProgress = 0;
+  let loadingInterval = setInterval(() => {
+    fakeProgress += Math.random() * 13 + 4;
+    if (fakeProgress >= 100) {
+      fakeProgress = 100;
+      clearInterval(loadingInterval);
+      showMenuSoon();
     }
-  );
-
-  // Change tip every 2.4s, never show the same tip twice in a row
-  let tipInterval = setInterval(() => {
-    let newPhrase = getNewPhrase();
-    text.innerText = newPhrase;
-    if (bar.style.width === "100%") clearInterval(tipInterval);
-  }, 2400);
+    bar.style.width = fakeProgress + "%";
+    // Show a new tip
+    let tip = getNewPhrase();
+    tips.innerText = tip;
+    text.innerText = tip;
+  }, 1500);
 }
 
-// ========== FADE LOADING => MAIN MENU ==========
-function showMainMenu() {
-  document.getElementById('loading-screen').style.opacity = 1;
-  let fade = setInterval(() => {
-    let op = parseFloat(document.getElementById('loading-screen').style.opacity);
-    if (op <= 0.03) {
-      document.getElementById('loading-screen').style.display = 'none';
-      document.getElementById('main-menu').style.display = 'block';
-      menuAnim();
-      clearInterval(fade);
-    } else {
-      document.getElementById('loading-screen').style.opacity = (op - 0.08).toFixed(2);
-    }
-  }, 40);
+function showMenuSoon() {
+  saveState("main-menu");
+  setTimeout(() => {
+    document.getElementById('loading-screen').style.opacity = 1;
+    let fade = setInterval(() => {
+      let op = parseFloat(document.getElementById('loading-screen').style.opacity);
+      if (op <= 0.03) {
+        document.getElementById('loading-screen').style.display = 'none';
+        document.getElementById('main-menu').style.display = 'block';
+        menuAnim();
+        clearInterval(fade);
+      } else {
+        document.getElementById('loading-screen').style.opacity = (op - 0.08).toFixed(2);
+      }
+    }, 40);
+  }, 1100);
 }
 
 // ========== FANTASY BACKGROUND ANIMATION ==========
@@ -163,14 +173,15 @@ function menuAnim() {
     let size = Math.random() * 1.8 + 0.5;
     let x = Math.random() * 100;
     let y = Math.random() * 100;
+    let color = ["#ffeecc", "#ffb300bb", "#f773bc", "#17e2ff"][Math.floor(Math.random()*4)];
     let duration = Math.random() * 2.5 + 3.5;
     let delay = Math.random() * 5;
     star.style = `
       position: absolute; left: ${x}vw; top: ${y}vh;
       width: ${size}vw; height: ${size}vw;
       border-radius: 50%;
-      background: radial-gradient(circle,#ffeecc 0%,#ffb300bb 60%,#fff0 100%);
-      opacity: 0.7;
+      background: radial-gradient(circle,${color} 0%,#fff0 100%);
+      opacity: 0.77;
       filter: blur(${size * 1.4}px);
       animation: star-float ${duration}s ${delay}s infinite alternate;
       pointer-events: none;
@@ -197,7 +208,6 @@ const pianoNotes = [
 ];
 function playRandomPiano() {
   if (!window.pianoReady) {
-    // Try to start audio context on first user interaction
     pianoNotes.forEach(a => { try { a.play().catch(()=>{}); a.pause(); a.currentTime=0; } catch{} });
     window.pianoReady = true;
   }
@@ -234,6 +244,7 @@ function setupMenuButtons() {
 document.addEventListener('DOMContentLoaded', function() {
   // Restore state: if already on main menu, skip loading
   let state = loadState();
+  spawnOrbs();
   if (state === "main-menu") {
     document.getElementById('loading-screen').style.display = 'none';
     document.getElementById('main-menu').style.display = 'block';
