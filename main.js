@@ -276,5 +276,5 @@ function zoomOut() {
 }
 function lockZoom() {
     locked = !locked;
-      }
-    
+                                  }
+                                    
