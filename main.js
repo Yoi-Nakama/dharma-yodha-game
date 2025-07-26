@@ -276,5 +276,11 @@ function zoomOut() {
 }
 function lockZoom() {
     locked = !locked;
-                                  }
-                                    
+}
+
+document.querySelectorAll(".main-container button").forEach(button => {
+  button.addEventListener("click", () => {
+    playPianoNote(220 + Math.random() * 220);
+  });
+});
+      
