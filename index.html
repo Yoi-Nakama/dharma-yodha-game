@@ -1,103 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Dharma Yodha - Loading</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-size: cover;
-      background-position: center;
-    }
-    .main-container {
-      width: 90vw;
-      max-width: 90vh;
-      aspect-ratio: 16 / 9;
-      border: 2px solid grey;
-      border-radius: 20px;
-      background-color: rgba(0, 0, 0, 0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      box-sizing: border-box;
-      padding: 20px;
-      transform-origin: center center !important;
-    }
-    .main-container button {
-      font-size: 1rem;
-      margin: 6px;
-      padding: 6px 12px;
-      border-radius: 8px;
-      background: linear-gradient(to right, #d4af37, #f0e68c);
-      border: none;
-      cursor: pointer;
-      width: 150px;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dharma Yodha</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <!-- Device Orientation Overlay -->
-  <div id="orientation-lock" style="display:none;">
-    <div class="orientation-text">
-      <h2>Rotate Device</h2>
-      <p>Please rotate your device to <b>landscape</b> mode to play Dharma Yodha.</p>
-      <div style="margin-top: 20px;">
-        <button onclick="playGuitarNote()">🎸 Play Guitar</button>
-        <button onclick="alert('🧳 Inventory system coming soon!')">🧳 Inventory</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Fantasy Loading Screen -->
+  <!-- Loading Screen -->
   <div id="loading-screen">
-    <div class="fantasy-glow"></div>
-    <div class="fantasy-orbs"></div>
-    <div class="loading-content">
-      <h1>Dharma Yodha</h1>
-      <p id="loading-text">Summoning the last light...</p>
-      <div class="progress-container">
-        <div class="progress-bar" id="progress-bar"></div>
-      </div>
+    <p id="loading-text">Summoning the last light...</p>
+  </div>
+
+  <!-- Main Game Menu -->
+  <div class="main-container" id="main-content" style="display: none;">
+    <h1>Dharma Yodha</h1>
+    <button onclick="startGame()">Start Game</button>
+    <button onclick="continueGame()">Continue</button>
+    <button onclick="openSettings()">Settings</button>
+    <button onclick="showAbout()">About</button>
+    <button onclick="exitGame()">Exit</button>
+
+    <div class="zoom-controls">
+      <button onclick="zoomIn()">＋</button>
+      <button onclick="zoomOut()">－</button>
+      <button onclick="lockZoom()">🔒</button>
     </div>
-    <div class="tips-slide" id="tips-slide"></div>
   </div>
-
-  <!-- Main Menu -->
-  <div id="main-content" class="main-container" style="display:none;">
-    <h1 class="game-title rainbow-text">Dharma Yodha</h1>
-    <button class="menu-btn" id="start-btn">Start Game</button>
-    <button class="menu-btn" id="continue-btn">Continue</button>
-    <button class="menu-btn" id="settings-btn">Settings</button>
-    <button class="menu-btn" id="about-btn">About</button>
-    <button class="menu-btn" id="exit-btn">Exit</button>
-  </div>
-
-  <!-- Zoom Controls Fixed -->
-  <div id="zoom-controls" style="position:fixed;top:10px;right:10px;z-index:9999;">
-    <button id="zoom-in">＋</button>
-    <button id="zoom-out">－</button>
-    <button onclick="lockZoom()">🔒</button>
-  </div>
-
-  <!-- Audio Files (piano or guitar or whatever you want to hook up later) -->
-  <audio id="piano1" src="assets/audio/piano1.mp3" preload="auto"></audio>
-  <audio id="piano2" src="assets/audio/piano2.mp3" preload="auto"></audio>
-  <audio id="piano3" src="assets/audio/piano3.mp3" preload="auto"></audio>
-  <audio id="piano4" src="assets/audio/piano4.mp3" preload="auto"></audio>
-  <audio id="piano5" src="assets/audio/piano5.mp3" preload="auto"></audio>
 
   <!-- Scripts -->
   <script src="main.js"></script>
   <script src="guitar_sound.js"></script>
 </body>
-  </html>
-  
+</html>
