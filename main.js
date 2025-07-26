@@ -1,4 +1,4 @@
-// ========== ORIENTATION LOCK ===========
+// ========== ORIENTATION LOCK ==========
 function checkOrientation() {
   let landscape = window.innerWidth > window.innerHeight;
   document.getElementById('orientation-lock').style.display = landscape ? 'none' : 'flex';
@@ -7,7 +7,7 @@ window.addEventListener('resize', checkOrientation);
 window.addEventListener('orientationchange', checkOrientation);
 checkOrientation();
 
-// ========== PREVENT RELOAD (NO OVERLAY!) ===========
+// ========== PREVENT RELOAD (NO OVERLAY!) ==========
 window.addEventListener('touchmove', e => {
   if (e.touches && e.touches.length === 1 && e.touches[0].clientY < 70) {
     e.preventDefault();
@@ -19,7 +19,7 @@ const STATE_KEY = "dharmayodha_state_v2";
 function saveState(page) { localStorage.setItem(STATE_KEY, page); }
 function loadState() { return localStorage.getItem(STATE_KEY) || "loading"; }
 
-// ========== LOADING ANIMATIONS AND RANDOMIZATION ===========
+// ========== LOADING ANIMATIONS AND RANDOMIZATION ==========
 const loadingPhrases = [
   "Summoning magic...",
   "Conjuring game world...",
@@ -82,35 +82,29 @@ const loadingPhrases = [
 ];
 let lastPhrases = [];
 
-// ========== ANIMATED RANDOM ORBS ===========
+// ========== ANIMATED RANDOM ORBS ==========
 function spawnOrbs() {
   const orbs = document.querySelector('.fantasy-orbs');
   orbs.innerHTML = "";
-  const colors = [
-    "#ffe066", "#ffb300", "#f773bc", "#17e2ff", "#ffe066", "#ffb300"
-  ];
+  const colors = ["#ffe066", "#ffb300", "#f773bc", "#17e2ff", "#ffe066", "#ffb300"];
   for (let i = 0; i < 7; i++) {
     let orb = document.createElement('div');
     orb.className = 'orb';
-    let size = Math.random() * 8 + 6; // vw
+    let size = Math.random() * 8 + 6;
     let x = Math.random() * 85;
     let y = Math.random() * 70;
     let color = colors[Math.floor(Math.random() * colors.length)];
-    orb.style = `
-      width:${size}vw;height:${size}vw;left:${x}vw;top:${y}vh;
+    orb.style = `width:${size}vw;height:${size}vw;left:${x}vw;top:${y}vh;
       background: radial-gradient(circle,${color} 0%,#fff0 100%);
       animation-delay: ${Math.random()*5}s;
       filter: blur(${size/4}px) brightness(1.1);
-      opacity: ${0.57 + Math.random()*0.18};
-      z-index:1;
-    `;
+      opacity: ${0.57 + Math.random()*0.18};z-index:1;`;
     orbs.appendChild(orb);
   }
 }
 
 // ========== LOADING BAR & RANDOM TIPS SLIDE ==========
 function getNewPhrase() {
-  // Ensure new phrase is not one of the last 4
   let pool = loadingPhrases.filter(x => !lastPhrases.includes(x));
   let phrase = pool[Math.floor(Math.random() * pool.length)];
   lastPhrases.push(phrase);
@@ -121,13 +115,8 @@ function animateLoading() {
   const bar = document.getElementById('progress-bar');
   const text = document.getElementById('loading-text');
   const tips = document.getElementById('tips-slide');
-  let progress = 0;
-  let phase = 0;
-
-  spawnOrbs();
-
-  // Asset loading simulation (fake for now)
   let fakeProgress = 0;
+  spawnOrbs();
   let loadingInterval = setInterval(() => {
     fakeProgress += Math.random() * 13 + 4;
     if (fakeProgress >= 100) {
@@ -136,7 +125,6 @@ function animateLoading() {
       showMenuSoon();
     }
     bar.style.width = fakeProgress + "%";
-    // Show a new tip
     let tip = getNewPhrase();
     tips.innerText = tip;
     text.innerText = tip;
@@ -166,7 +154,6 @@ function menuAnim() {
   const bg = document.getElementById('bg-anim');
   if (!bg) return;
   bg.innerHTML = "";
-  // Fantasy particles
   for (let i = 0; i < 40; i++) {
     let star = document.createElement('div');
     star.className = 'star-particle';
@@ -176,29 +163,23 @@ function menuAnim() {
     let color = ["#ffeecc", "#ffb300bb", "#f773bc", "#17e2ff"][Math.floor(Math.random()*4)];
     let duration = Math.random() * 2.5 + 3.5;
     let delay = Math.random() * 5;
-    star.style = `
-      position: absolute; left: ${x}vw; top: ${y}vh;
-      width: ${size}vw; height: ${size}vw;
-      border-radius: 50%;
+    star.style = `position: absolute; left: ${x}vw; top: ${y}vh;
+      width: ${size}vw; height: ${size}vw; border-radius: 50%;
       background: radial-gradient(circle,${color} 0%,#fff0 100%);
-      opacity: 0.77;
-      filter: blur(${size * 1.4}px);
+      opacity: 0.77; filter: blur(${size * 1.4}px);
       animation: star-float ${duration}s ${delay}s infinite alternate;
-      pointer-events: none;
-      z-index: 1;
-    `;
+      pointer-events: none; z-index: 1;`;
     bg.appendChild(star);
   }
 }
 const style = document.createElement('style');
-style.innerHTML = `
-@keyframes star-float {
+style.innerHTML = `@keyframes star-float {
   from { transform: translateY(0) scale(1);}
   to { transform: translateY(-12vh) scale(1.2);}
 }`;
 document.head.appendChild(style);
 
-// ========== BUTTON SOUND EFFECTS (PIANO NOTES) ==========
+// ========== PIANO NOTES ==========
 const pianoNotes = [
   document.getElementById('piano1'),
   document.getElementById('piano2'),
@@ -217,32 +198,63 @@ function playRandomPiano() {
   note.play();
 }
 
-// ========== MENU BUTTON EVENTS ==========
+// ========== MENU BUTTONS ==========
 function setupMenuButtons() {
   ["start-btn","continue-btn","settings-btn","about-btn","exit-btn"].forEach(id => {
     let btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', playRandomPiano, false);
   });
-  document.getElementById('start-btn')?.addEventListener('click', () => {
-    alert("Start Game coming soon! (Connect to your game/scene logic here)");
-  });
-  document.getElementById('continue-btn')?.addEventListener('click', () => {
-    alert("Continue feature coming soon!");
-  });
-  document.getElementById('settings-btn')?.addEventListener('click', () => {
-    alert("Settings coming soon!");
-  });
-  document.getElementById('about-btn')?.addEventListener('click', () => {
-    alert("Dharma Yodha — a fantasy adventure by Yoi-Nakama. (Expand this about page!)");
-  });
-  document.getElementById('exit-btn')?.addEventListener('click', () => {
-    alert("Exit: On web, you can just close the tab or go back.");
-  });
+  document.getElementById('start-btn')?.addEventListener('click', startGame);
+  document.getElementById('continue-btn')?.addEventListener('click', continueGame);
+  document.getElementById('settings-btn')?.addEventListener('click', openSettings);
+  document.getElementById('about-btn')?.addEventListener('click', showAbout);
+  document.getElementById('exit-btn')?.addEventListener('click', exitGame);
 }
 
-// ========== APP ENTRYPOINT ==========
+// ========== ZOOM FUNCTIONS ==========
+let zoomLevel = 1;
+let locked = false;
+function zoomIn() {
+  if (!locked) {
+    zoomLevel += 0.1;
+    document.getElementById("main-content").style.transform = `scale(${zoomLevel})`;
+  }
+}
+function zoomOut() {
+  if (!locked) {
+    zoomLevel = Math.max(0.5, zoomLevel - 0.1);
+    document.getElementById("main-content").style.transform = `scale(${zoomLevel})`;
+  }
+}
+function lockZoom() {
+  locked = !locked;
+  alert(locked ? "Zoom locked!" : "Zoom unlocked.");
+}
+
+// ========== GAME EVENTS ==========
+function startGame() {
+  playRandomPiano();
+  alert("⚔️ Starting your Yodha's path...");
+}
+function continueGame() {
+  playRandomPiano();
+  alert("📖 Resuming your journey...");
+}
+function openSettings() {
+  playRandomPiano();
+  alert("⚙️ Settings not ready yet!");
+}
+function showAbout() {
+  playRandomPiano();
+  alert("🌟 Dharma Yodha: Rise of Kaliyuga's Last Light.\nCreated with soul & sweat by Rudravir & Sofi.");
+}
+function exitGame() {
+  playRandomPiano();
+  alert("🚪 Exiting game. May your karma shine.");
+}
+
+// ========== ENTRY POINT ==========
 document.addEventListener('DOMContentLoaded', function() {
-  // Restore state: if already on main menu, skip loading
   let state = loadState();
   spawnOrbs();
   if (state === "main-menu") {
@@ -256,31 +268,29 @@ document.addEventListener('DOMContentLoaded', function() {
     animateLoading();
     setupMenuButtons();
   }
-});
-let zoomLevel = 1.0;
-let locked = false;
 
-function zoomIn() {
-    if (!locked) {
-        zoomLevel += 0.1;
-        document.body.style.transform = `scale(${zoomLevel})`;
-        document.body.style.transformOrigin = 'top left';
-    }
-}
-function zoomOut() {
-    if (!locked) {
-        zoomLevel = Math.max(0.5, zoomLevel - 0.1);
-        document.body.style.transform = `scale(${zoomLevel})`;
-        document.body.style.transformOrigin = 'top left';
-    }
-}
-function lockZoom() {
-    locked = !locked;
-}
+  const tips = [
+    "Summoning the last light...",
+    "Sharpening celestial weapons...",
+    "Blessings of Hanuman incoming...",
+    "Charging Dharma-Karma engine...",
+    "Calling divine bloodlines...",
+    "Restoring Kshatriya pride...",
+    "Forming soul bonds...",
+    "Summoning the voice of Vyasa..."
+  ];
 
-document.querySelectorAll(".main-container button").forEach(button => {
-  button.addEventListener("click", () => {
-    playPianoNote(220 + Math.random() * 220);
-  });
+  const loadingText = document.getElementById("loading-text");
+  let tipIndex = 0;
+
+  const tipCycle = setInterval(() => {
+    tipIndex = (tipIndex + 1) % tips.length;
+    loadingText.innerText = tips[tipIndex];
+  }, 2500);
+
+  setTimeout(() => {
+    clearInterval(tipCycle);
+    document.getElementById("loading-screen").style.display = "none";
+    document.getElementById("main-content").style.display = "flex";
+  }, 10000);
 });
-      
