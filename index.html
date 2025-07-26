@@ -5,8 +5,6 @@
   <title>Dharma Yodha - Loading</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
   <link rel="stylesheet" href="style.css">
-</head>
-<body>
   <style>
     body {
       margin: 0;
@@ -44,6 +42,8 @@
       width: 150px;
     }
   </style>
+</head>
+<body>
 
   <!-- Device Orientation Overlay -->
   <div id="orientation-lock" style="display:none;">
@@ -74,28 +74,30 @@
   <!-- Main Menu -->
   <div id="main-content" class="main-container" style="display:none;">
     <h1 class="game-title rainbow-text">Dharma Yodha</h1>
-    <button class="menu-btn" onclick="startGame()">Start Game</button>
-    <button class="menu-btn" onclick="continueGame()">Continue</button>
-    <button class="menu-btn" onclick="openSettings()">Settings</button>
-    <button class="menu-btn" onclick="showAbout()">About</button>
-    <button class="menu-btn" onclick="exitGame()">Exit</button>
-
-    <div class="zoom-controls">
-      <button onclick="zoomIn()">＋</button>
-      <button onclick="zoomOut()">－</button>
-      <button onclick="lockZoom()">🔒</button>
-    </div>
+    <button class="menu-btn" id="start-btn">Start Game</button>
+    <button class="menu-btn" id="continue-btn">Continue</button>
+    <button class="menu-btn" id="settings-btn">Settings</button>
+    <button class="menu-btn" id="about-btn">About</button>
+    <button class="menu-btn" id="exit-btn">Exit</button>
   </div>
 
-  <!-- Zoom Buttons Fixed -->
+  <!-- Zoom Controls Fixed -->
   <div id="zoom-controls" style="position:fixed;top:10px;right:10px;z-index:9999;">
-    <button onclick="zoomIn()">＋</button>
-    <button onclick="zoomOut()">－</button>
+    <button id="zoom-in">＋</button>
+    <button id="zoom-out">－</button>
     <button onclick="lockZoom()">🔒</button>
   </div>
 
-  <!-- Audio Placeholder (for guitar sound) -->
+  <!-- Audio Files (piano or guitar or whatever you want to hook up later) -->
+  <audio id="piano1" src="assets/audio/piano1.mp3" preload="auto"></audio>
+  <audio id="piano2" src="assets/audio/piano2.mp3" preload="auto"></audio>
+  <audio id="piano3" src="assets/audio/piano3.mp3" preload="auto"></audio>
+  <audio id="piano4" src="assets/audio/piano4.mp3" preload="auto"></audio>
+  <audio id="piano5" src="assets/audio/piano5.mp3" preload="auto"></audio>
+
+  <!-- Scripts -->
   <script src="main.js"></script>
   <script src="guitar_sound.js"></script>
 </body>
-</html>
+  </html>
+  
