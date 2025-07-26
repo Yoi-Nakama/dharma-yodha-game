@@ -7,6 +7,45 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+  }
+  .main-container {
+    width: 90vw;
+    max-width: 90vh;
+    aspect-ratio: 16 / 9;
+    border: 2px solid grey;
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 20px;
+    transform-origin: center center !important;
+  }
+  .main-container button {
+    font-size: 1rem;
+    margin: 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: linear-gradient(to right, #d4af37, #f0e68c);
+    border: none;
+    cursor: pointer;
+    width: 150px;
+  }
+</style>
+<div class="main-container" id="main-content">
+
   <!-- Device Orientation Overlay -->
   <div id="orientation-lock">
     <div class="orientation-text">
@@ -56,37 +95,13 @@
   <audio id="piano5" src="assets/audio/piano5.mp3" preload="auto"></audio>
   <script src="main.js"></script>
 
+<div id="zoom-controls" style="position:fixed;top:10px;right:10px;z-index:9999;">
+    <button onclick="zoomIn()">＋</button>
+    <button onclick="zoomOut()">－</button>
+    <button onclick="lockZoom()">🔒</button>
+</div>
+<script src="piano_sound.js"></script>
 
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    let scale = 1, startDistance = 0;
-    let container = document.body;
-
-    container.addEventListener('touchstart', function(e) {
-        if (e.touches.length === 2) {
-            startDistance = Math.hypot(
-                e.touches[0].pageX - e.touches[1].pageX,
-                e.touches[0].pageY - e.touches[1].pageY
-            );
-        }
-    });
-
-    container.addEventListener('touchmove', function(e) {
-        if (e.touches.length === 2) {
-            e.preventDefault();
-            const currentDistance = Math.hypot(
-                e.touches[0].pageX - e.touches[1].pageX,
-                e.touches[0].pageY - e.touches[1].pageY
-            );
-            const zoomFactor = currentDistance / startDistance;
-            scale = Math.min(Math.max(0.8, zoomFactor), 2);
-            container.style.transform = `scale(${scale})`;
-            container.style.transformOrigin = '0 0';
-        }
-    }, { passive: false });
-});
-</script>
-
+</div>
 </body>
-</html>
+    </html>
